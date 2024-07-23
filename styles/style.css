@@ -1,3 +1,126 @@
-.intro {
+body{
     background-color: #ffffff;
+    overflow-x: hidden;
+    height: max-content;
+}
+
+a{
+    text-decoration: none;
+}
+
+.name{
+    font-size: 7rem;
+    position: relative;
+    left: 1em;
+    top: 4rem;
+    font-family: Asul;
+    font-weight: 550;
+    width:45rem;
+}
+
+.welcome{
+    font-size: 2rem;
+    position: relative;
+    font-family: Asul;
+    top: 0.5rem;
+    left: 6em;
+    letter-spacing: 0.3rem;
+    text-align: center;
+    width:35rem;
+}
+.web-desc{
+    border-bottom: thin solid black;
+    width:35rem;
+    border-left: thin solid black;
+    border-right: thin solid black;
+    border-top: thin solid black;
+}
+
+.intro {
+    height: 20rem;
+}
+
+.encoding{
+    display: flex;
+    flex-direction: row;
+    padding-right: 2rem;
+    flex-wrap: wrap;
+    gap: 50px;
+    width: 90em;
+    height: 10rem;
+}
+
+.button{
+    font-size: 1.2rem;
+    position: relative;
+    left: 10rem;
+    bottom: -4rem;
+    border: thin solid;
+    width: 15rem;
+    text-align: center;
+    border-radius: 2rem;
+    border-color: orangered;
+    border-width: 0.1rem;
+    background-color:#ffffff;
+    color: orangered;
+    transition: all 0.3s;
+}
+
+.button:hover{
+    transform: translateY(1px);
+    background-color: orangered;
+}
+
+.image-txt{
+    font-family: Cardo;
+    font-weight: 600;
+    color: orangered;
+}
+
+.image-txt:hover{
+    color:#ffffff;
+    z-index: 2;
+}
+
+.audio-txt{
+    font-family: Cardo;
+    font-weight: 600;
+    color: orangered;
+}
+
+.audio-txt:hover{
+    color:#ffffff;
+    z-index: 2;
+}
+
+.video-txt{
+    font-family: Cardo; 
+    font-weight: 600;
+    color: orangered
+}
+
+.video-txt:hover{
+    color:#ffffff;
+    z-index: 2;
+}
+
+.text-txt{
+    font-family: Cardo; 
+    font-weight: 600;
+    color: orangered
+}
+
+.text-txt:hover{
+    color:#ffffff;
+    z-index: 2;
+}
+
+.home{
+    position: relative;
+    top: -25rem;
+    left: 1.5rem;
+}
+
+.home:hover{
+    opacity: 0.7;
 }
