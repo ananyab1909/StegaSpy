@@ -1,4 +1,13 @@
 import wave
+import soundfile as sf
+
+def change(file) :
+  with sf.SoundFile(file, 'r') as f:
+    data = f.read()
+
+    with sf.SoundFile('output.wav', 'w', samplerate=f.samplerate, channels=f.channels, subtype='PCM_16') as f:
+        f.write(data)
+  
 
 def help():
   print("\033[92mHide Your Secret Message in Audio Wave File.\033[0m")
@@ -34,7 +43,13 @@ def main():
   string = input("Enter your secret message: ")
   output = input("Enter the output file path and name: ")
   try:
-    em_audio(af, string, output)
+    with sf.SoundFile(af, 'r') as f:
+        data = f.read()
+
+    with sf.SoundFile('output.wav', 'w', samplerate=f.samplerate, channels=f.channels, subtype='PCM_16') as f:
+        f.write(data)
+    out = 'output.wav'   
+    em_audio(out, string, output)
     ex_msg(output)
   except:
     print("Something went wrong!! try again")
