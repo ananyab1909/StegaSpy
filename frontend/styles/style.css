@@ -166,11 +166,13 @@ a{
 }
 
 #img-view{
-    width: 100%;
+    width: 175%;
     height: 100%;
     border-radius: 40px;
     border: 2px dashed #bbb5ff;
     background: #f7f8ff;
+    position: relative;
+    top: 1.5rem;
 }
 
 #img-view img {
@@ -190,12 +192,6 @@ a{
     top: 0.8rem;
 }
 
-.secret-text-image{
-    position: relative;
-    top: 2.8rem;
-    left: 14em;
-}
-
 .image-submit{
     position: relative;
     top: 2.5rem;
@@ -203,4 +199,16 @@ a{
     height: 30px;
     width: 80px;
 
+}
+
+.secret-text-image {
+    position: relative;
+    left: -9rem;
+    top: 26rem;
+}
+
+.submit-button {
+    position: relative;
+    left: -6rem;
+    top: 28rem;
 }

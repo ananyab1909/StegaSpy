@@ -42,8 +42,8 @@ button4.addEventListener('click',()=>{
     text.style.display = 'block';
 })
 
-const dropArea = document.getElementById("drop-area1");
-const inputFile = document.getElementById("input-file1");
+const dropArea = document.getElementById("drop-area");
+const inputFile = document.getElementById("input-file");
 const imageView = document.getElementById("img-view");
 
 inputFile.addEventListener("change" , uploadImage);
@@ -63,6 +63,3 @@ dropArea.addEventListener("drop" , function(e){
     e.preventDefault();
     inputFile.files = e.dataTransfer.files;
 });
-
-
-

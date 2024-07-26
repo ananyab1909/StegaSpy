@@ -64,21 +64,53 @@
     <div class="image-hide">
         <div class="hide1">
             <label for="input-file" id="drop-area">
-                <input type="file" accept="image/*" id="input-file" >
                 <div id="img-view">
                     <img src="images/icon.png" alt="upload" class="image-icon">
                     <p>Click here to upload <br>to upload image</p>
                     <span>Upload any image from the desktop</span>
                 </div>
             </label>
-        </div>
-        <div class="secret-text-image">
-            <input type="text" id="name" placeholder="Enter your secret message" image="image-secret">
-        </div>
-        <div class="image-submit">
-            <input type="submit" id="submit-button" value="Submit" class="image-submit">
+            <form id="image-upload" action="/run_python" method="post" enctype="multipart/form-data">
+                <input type="file" accept="image/*" id="input-file" name="imageName">
+                <div class="secret-text-image">
+                    <input type="text" id="message" name="message" placeholder="Enter your secret message" required>
+                </div>
+                <div class="submit-button">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
+    <script>
+        const form = document.getElementById('image-upload')
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageInput = document.getElementById('message');  
+            const message = messageInput.value;
+            console.log(message);
+            const inputFile = document.getElementById('input-file');
+            const imageName = inputFile.files[0].name;
+            console.log(imageName);
+
+            const jsonData = {
+                "imageName": imageName,
+                "message": message
+            };
+
+            const response = await fetch("http://127.0.0.1:5000/run_python", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            });
+            if (response.status === 200) {
+                alert("Success! Your request has been processed.");
+            } else {
+                console.error(`Error: ${response.status} ${response.statusText}`);
+            }
+        })
+    </script>
     <div class="video-hide">
         <div class="hide2">
             <p>
