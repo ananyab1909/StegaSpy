@@ -61,12 +61,42 @@
             </div>
         </a>
     </div>
+    <div class="decoding">
+        <a href="#id" class="image-decoding-button">
+            <div class="button-decode">
+                <p class="image-txt-decode">
+                    Decoding text from image
+                </p>
+            </div>
+        </a>
+        <a href="#ad" class="audio-decoding-button">
+            <div class="button-decode">
+                <p class="audio-txt-decode">
+                    Decoding text from audio
+                </p>
+            </div>
+        </a>
+        <a href="#vd" class="video-decoding-button">
+            <div class="button-decode">
+                <p class="video-txt-decode">
+                    Decoding text from video
+                </p>
+            </div>
+        </a>
+        <a href="#td" class="text-decoding-button">
+            <div class="button-decode">
+                <p class="text-txt-decode">
+                    Decoding text from text
+                </p>
+            </div>
+        </a>
+    </div>
     <div class="image-hide">
         <div class="hide1">
             <label for="input-file" id="drop-area">
                 <div id="img-view">
                     <img src="images/icon.png" alt="upload" class="image-icon">
-                    <p>Click here to upload <br>to upload image</p>
+                    <p>Click here to <br>upload image</p>
                     <span>Upload any image from the desktop</span>
                 </div>
             </label>
@@ -75,7 +105,7 @@
                 <div class="secret-text-image">
                     <input type="text" id="message" name="message" placeholder="Enter your secret message" required>
                 </div>
-                <div class="submit-button">
+                <div class="submit-button-image">
                     <button type="submit">Submit</button>
                 </div>
             </form>
@@ -111,14 +141,60 @@
             }
         })
     </script>
-    <div class="video-hide">
-        <div class="hide2">
-            <p>
-                Hello
-            </p>
+
+    <div class = "audio-hide">
+        <div class = "hide2">
+            <label for="input-file1" id="drop-area1">
+                <div id = "audio-view">
+                    <img src="images/audio.png" alt="upload1" class="audio-icon">
+                    <p>Click here to <br>upload audio</p>
+                    <span>Upload any audio from the desktop</span>
+                </div>
+            </label>
+            <form id = "audio-upload" action="/hide_text" method="post" enctype="multipart/form-data">
+                <input type="file" accept="audio/*" id="input-file1" name="audioName">
+                <div class="secret-text-audio">
+                    <input type="text" id="message-audio" name="message-audio" placeholder="Enter your secret message" required>
+                </div> 
+                <div class="submit-button-audio">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="audio-hide">
+    
+    <script>
+        const formaudio = document.getElementById('audio-upload');
+        formaudio.addEventListener('submit', async (e) => {
+            {
+                e.preventDefault();
+                const messageAudioInput = document.getElementById('message-audio');  
+                const messageAudio = messageAudioInput.value;
+                console.log(messageAudio);
+                const inputAudioFile = document.getElementById('input-file1');
+                const audioName = inputAudioFile.files[0].name;
+                console.log(audioName);
+                const jsonAudioData = {
+                    "audioFile": audioName,
+                    "text": messageAudio
+                };
+                const responseAudio = await fetch("http://127.0.0.1:5000/hide_text", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonAudioData)
+                });
+                if (responseAudio.status === 200) {
+                    alert("Success! Your request has been processed.");
+                } else {
+                    console.error(`Error: ${response.status} ${response.statusText}`);
+                }
+            }
+        })
+    </script>
+
+    <div class="video-hide">
         <div class="hide3">
             <p>
                 Hello
@@ -127,6 +203,110 @@
     </div>
     <div class="text-hide">
         <div class="hide4">
+            <form id = "text-upload" action="/decode_text" method="post" enctype="multipart/form-data">
+                <div class="secret-text-text">
+                    <input type="text" id="message-text" name="message-text" placeholder="Enter your secret message" required>
+                    <input type="text" id="message-text-cover" name="message-text-cover" placeholder="Enter your cover message" required>
+                </div> 
+                <div class="submit-button-text">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const formtext = document.getElementById('text-upload');
+        formtext.addEventListener('submit', async (e) => {
+            {
+                e.preventDefault();
+                const messageTextInput = document.getElementById('message-text');  
+                const messageText = messageTextInput.value;
+                console.log(messageText);
+                const coverTextInput = document.getElementById('message-text-cover');  
+                const coverText = coverTextInput.value;
+                console.log(coverText);
+                const jsonTextData = {
+                    "coverText": coverText,
+                    "secretMessage": messageText
+                };
+                const responseAudio = await fetch("http://127.0.0.1:5000/decode_text", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonTextData)
+                });
+                if (responseAudio.status === 200) {
+                    alert("Success! Your request has been processed. File saved as output.docx");
+                } else {
+                    console.error(`Error: ${response.status} ${response.statusText}`);
+                }
+            }
+        }
+    )
+    </script>
+    <div class="image-extract">
+        <div class="extract1">
+            <label for="input-file3" id="drop-area3">
+                <div id="img-view">
+                    <img src="images/icon.png" alt="upload" class="image-icon">
+                    <p>Click here to <br>upload image</p>
+                    <span>Upload any image from the desktop</span>
+                </div>
+            </label>
+            <form id="image-upload-decode" action="/decode_image" method="post" enctype="multipart/form-data">
+                <input type="file" accept="image/*" id="input-file3" name="imageName">
+                <div class="submit-button-image">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const formImageDecode = document.getElementById('image-upload-decode')
+        formImageDecode.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const inputDecodeFile = document.getElementById('input-file3');
+            const imageDecodeName = inputDecodeFile.files[0].name;
+            console.log(imageDecodeName);
+
+            const jsonImageDecode = {
+                "imageName": imageDecodeName,
+            };
+
+            const response = await fetch("http://127.0.0.1:5000/decode_image", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonImageDecode)
+            });
+            if (response.status === 200) {
+                alert("Success! Your request has been processed.");
+            } else {
+                console.error(`Error: ${response.status} ${response.statusText}`);
+            }
+        })
+    </script>
+
+    <div class="audio-extract">
+        <div class="extract2">
+            <p>
+                Hello
+            </p>
+        </div>
+    </div>
+    <div class="video-extract">
+        <div class="extract3">
+            <p>
+                Hello
+            </p>
+        </div>
+    </div>
+    <div class="text-extract">
+        <div class="extract4">
             <p>
                 Hello
             </p>
