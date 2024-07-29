@@ -230,14 +230,14 @@
                     "coverText": coverText,
                     "secretMessage": messageText
                 };
-                const responseAudio = await fetch("http://127.0.0.1:5000/decode_text", {
+                const responseText = await fetch("http://127.0.0.1:5000/decode_text", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(jsonTextData)
                 });
-                if (responseAudio.status === 200) {
+                if (responseText.status === 200) {
                     alert("Success! Your request has been processed. File saved as output.docx");
                 } else {
                     console.error(`Error: ${response.status} ${response.statusText}`);
@@ -246,6 +246,7 @@
         }
     )
     </script>
+
     <div class="image-extract">
         <div class="extract1">
             <label for="input-file3" id="drop-area3">
@@ -276,14 +277,14 @@
                 "imageName": imageDecodeName,
             };
 
-            const response = await fetch("http://127.0.0.1:5000/decode_image", {
+            const responseImageDecode = await fetch("http://127.0.0.1:5000/decode_image", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(jsonImageDecode)
             });
-            if (response.status === 200) {
+            if (responseImageDecode.status === 200) {
                 alert("Success! Your request has been processed.");
             } else {
                 console.error(`Error: ${response.status} ${response.statusText}`);
@@ -293,11 +294,49 @@
 
     <div class="audio-extract">
         <div class="extract2">
-            <p>
-                Hello
-            </p>
+            <label for="input-file4" id="drop-area4">
+                <div id="audio-view">
+                    <img src="images/audio.png" alt="upload" class="audio-icon">
+                    <p>Click here to <br>upload audio</p>
+                    <span>Upload any audio from the desktop</span>
+                </div>
+            </label>
+            <form id="audio-upload-decode" action="/decode_audio" method="post" enctype="multipart/form-data">
+                <input type="file" accept="audio/*" id="input-file4" name="audioFile">
+                <div class="submit-button-audio-decode">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
+
+    <script>
+        const formAudioDecode = document.getElementById('audio-upload-decode')
+        formAudioDecode.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const inputAudioDecodeFile = document.getElementById('input-file4');
+            const audioDecodeName = inputAudioDecodeFile.files[0].name;
+            console.log(audioDecodeName);
+
+            const jsonAudioDecode = {
+                "audioFile": audioDecodeName,
+            };
+
+            const responseAudioDecode = await fetch("http://127.0.0.1:5000/decode_audio", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonAudioDecode)
+            });
+            if (responseAudioDecode.status === 200) {
+                alert("Success! Your request has been processed.");
+            } else {
+                console.error(`Error: ${response.status} ${response.statusText}`);
+            }
+        })
+    </script>
+
     <div class="video-extract">
         <div class="extract3">
             <p>
@@ -307,11 +346,49 @@
     </div>
     <div class="text-extract">
         <div class="extract4">
-            <p>
-                Hello
-            </p>
+            <label for="input-file6" id="drop-area6">
+                <div id="text-view">
+                    <img src="images/text.png" alt="upload" class="text-icon">
+                    <p>Click here to <br>upload text</p>
+                    <span>Upload any text from the desktop</span>
+                </div>
+            </label>
+            <form id="text-upload-decode" action="/decoded_from_text" method="post" enctype="multipart/form-data">
+                <input type="file" accept=".docx, .txt, .log, .ini" id="input-file6" name="textFile">
+                <div class="submit-button-text-decode">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
+
+    <script>
+        const formTextDecode = document.getElementById('text-upload-decode')
+        formTextDecode.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const inputTextDecodeFile = document.getElementById('input-file6');
+            const textDecodeName = inputTextDecodeFile.files[0].name;
+            console.log(textDecodeName);
+
+            const jsonTextDecode = {
+                "textFile": textDecodeName,
+            };
+
+            const responseTextDecode = await fetch("http://127.0.0.1:5000/decoded_from_text", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonTextDecode)
+            });
+            if (responseTextDecode.status === 200) {
+                alert("Success! Your request has been processed.");
+            } else {
+                console.error(`Error: ${response.status} ${response.statusText}`);
+            }
+        })
+    </script>
+
     <script src="app.js"></script>
 </body>
 </html>
