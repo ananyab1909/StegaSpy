@@ -188,7 +188,7 @@
                 if (responseAudio.status === 200) {
                     alert("Success! Your request has been processed.");
                 } else {
-                    console.error(`Error: ${response.status} ${response.statusText}`);
+                    console.error(`Error: ${response.status} ${responseAudio.statusText}`);
                 }
             }
         })
@@ -196,11 +196,56 @@
 
     <div class="video-hide">
         <div class="hide3">
-            <p>
-                Hello
-            </p>
+            <label for="input-file2" id="drop-area2">
+                <div id = "video-view">
+                    <img src="images/video.png" alt="upload2" class="video-icon">
+                    <p>Click here to <br>upload video</p>
+                    <span>Upload any video from the desktop</span>
+                </div>
+            </label>
+            <form id = "video-upload" action="/encode_video" method="post" enctype="multipart/form-data">
+                <input type="file" accept="video/*" id="input-file2" name="videoFile">
+                <div class="secret-text-video">
+                    <input type="text" id="message-video" name="message-video" placeholder="Enter your secret message" required>
+                </div> 
+                <div class="submit-button-video">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
         </div>
     </div>
+
+    <script>
+        const formvideo = document.getElementById('video-upload');
+        formvideo.addEventListener('submit', async (e) => {
+            {
+                e.preventDefault();
+                const messageVideoInput = document.getElementById('message-video');  
+                const messageVideo = messageVideoInput.value;
+                console.log(messageVideo);
+                const inputVideoFile = document.getElementById('input-file2');
+                const videoName = inputVideoFile.files[0].name;
+                console.log(videoName);
+                const jsonVideoData = {
+                    "videoFile": videoName,
+                    "secretMessage": messageVideo
+                };
+                const responseVideo = await fetch("http://127.0.0.1:5000/encode_video", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonVideoData)
+                });
+                if (responseVideo.status === 200) {
+                    alert("Success! Your request has been processed.");
+                } else {
+                    console.error(`Error: ${response.status} ${responseVideo.statusText}`);
+                }
+            }
+        })
+    </script>
+
     <div class="text-hide">
         <div class="hide4">
             <form id = "text-upload" action="/decode_text" method="post" enctype="multipart/form-data">
@@ -240,7 +285,7 @@
                 if (responseText.status === 200) {
                     alert("Success! Your request has been processed. File saved as output.docx");
                 } else {
-                    console.error(`Error: ${response.status} ${response.statusText}`);
+                    console.error(`Error: ${response.status} ${responseText.statusText}`);
                 }
             }
         }
@@ -287,7 +332,7 @@
             if (responseImageDecode.status === 200) {
                 alert("Success! Your request has been processed.");
             } else {
-                console.error(`Error: ${response.status} ${response.statusText}`);
+                console.error(`Error: ${response.status} ${responseImageDecode.statusText}`);
             }
         })
     </script>
@@ -332,7 +377,7 @@
             if (responseAudioDecode.status === 200) {
                 alert("Success! Your request has been processed.");
             } else {
-                console.error(`Error: ${response.status} ${response.statusText}`);
+                console.error(`Error: ${response.status} ${responseAudioDecode.statusText}`);
             }
         })
     </script>
@@ -384,7 +429,7 @@
             if (responseTextDecode.status === 200) {
                 alert("Success! Your request has been processed.");
             } else {
-                console.error(`Error: ${response.status} ${response.statusText}`);
+                console.error(`Error: ${response.status} ${responseTextDecode.statusText}`);
             }
         })
     </script>
