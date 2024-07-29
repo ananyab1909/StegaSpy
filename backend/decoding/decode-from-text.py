@@ -7,7 +7,7 @@ from pymongo import MongoClient
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['Steganography']
-collection = db['text-encode']
+collection = db['text-decode']
 
 def get_full_path(file_name):
     for root, dirs, files in os.walk(os.getcwd()):
@@ -15,50 +15,53 @@ def get_full_path(file_name):
             return os.path.abspath(file)
     return "File not found"
 
-def hide_secret_message(text, secret_message):
-    doc = docx.Document()
+def extract_secret_message(file_path):
+    path = get_full_path(file_path)
+    doc = docx.Document(path)
+
+    secret_message = ''
+
+    for para in doc.paragraphs:
+        for run in para.runs:
+            if run.font.size == docx.shared.Pt(10):
+                secret_message += run.text
     
-    for i, char in enumerate(text):
-        para = doc.add_paragraph()
-        
-        if i < len(secret_message):
-            run = para.add_run(secret_message[i])
-            run.font.size = docx.shared.Pt(10) 
-        else:
-            run = para.add_run(char)
-            run.font.size = docx.shared.Pt(12) 
-    
-    doc.save('output.docx')
+    outFile = os.path.join(os.path.dirname(path), 'secret-message.txt')
+    with open(outFile, 'w') as f:
+        f.write(secret_message)
 
 app=Flask(__name__)
 CORS(app)
 
-@app.route('/decode_text', methods=['POST'])
-def decode_text():
+@app.route('/decoded_from_text', methods=['POST'])
+def decoded_from_text() :
     try:
         if not request.is_json:
           return jsonify({'status': 400, 'message': 'Invalid request'}), 400
         
         data = request.json
-        if 'coverText' not in data or 'secretMessage' not in data:
+        if 'textFile' not in data:
             return jsonify({'status': 400, 'message': 'Invalid request'}), 400
         
-        cover = data['coverText']
-        message = data['secretMessage']
+        docFile = data['textFile']
+        docPath = get_full_path(docFile)
         
+        if docPath == "File not found":
+            return jsonify({'status': 404, 'essage': 'Text file not found'}), 404
+
         try:
-            hide_secret_message(cover,message)
+            extract_secret_message(docPath)
 
             mongoTextDecode = {
-                "coverText" : cover,
-                "secretMessage" : message,
-                "outputDoc" : "output.docx",
+                "textFile" : docFile,
+                "outputFile" : "secret-message.txt",
             }
 
             result = collection.insert_one(mongoTextDecode)
             collection.update_one({"_id": result.inserted_id}, {"$set": {"created_at": {"$currentDate": {"type": "date"}}}})
 
-            return jsonify({'status': 200, 'document': 'output.docx', 'message': 'Success'}), 200
+            return jsonify({'status': 200, 'filename': 'secret-message.txt', 'essage': 'Success'}), 200
+        
         except Exception as e:
             print(f"Error processing request: {e}")
             return jsonify({'status': 500, 'message': 'Internal Server Error'}), 500

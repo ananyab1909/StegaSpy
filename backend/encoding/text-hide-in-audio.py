@@ -4,6 +4,11 @@ from flask import Flask, request,jsonify,send_file
 from flask_cors import CORS
 import glob
 import os
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['Steganography']
+collection = db['audio-encode']
 
 def em_audio(audio, string, output):
   waveaudio = wave.open(audio, mode='rb')
@@ -52,6 +57,16 @@ def hide_text():
         wav_path = os.path.join(os.path.dirname(audio_path), 'output.wav')
         wavconvert(audio_path)
         em_audio(wav_path, message, 'output_stego.wav')
+
+        mongoAudioDecode = {
+            "audioFile" : filename,
+            "secretMessage" : message,
+            "outputFile" : "output.wav",
+        }
+
+        result = collection.insert_one(mongoAudioDecode)
+        collection.update_one({"_id": result.inserted_id}, {"$set": {"created_at": {"$currentDate": {"type": "date"}}}})
+
         return send_file('output_stego.wav', mimetype='audio/wav')
     except Exception as e:
         import traceback

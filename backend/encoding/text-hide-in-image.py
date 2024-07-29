@@ -3,6 +3,11 @@ import os
 import glob
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['Steganography']
+collection = db['image-encode']
 
 def get_full_path(file_name):
     for root, dirs, files in os.walk(os.getcwd()):
@@ -32,6 +37,16 @@ def run_python():
 
     try:
         texthide(imageFile, textMessage, outImage)
+
+        mongoImageDecode = {
+            "imageFile" : imageFile,
+            "secretMessage" : textMessage,
+            "outputFile" : "output.png",
+        }
+
+        result = collection.insert_one(mongoImageDecode)
+        collection.update_one({"_id": result.inserted_id}, {"$set": {"created_at": {"$currentDate": {"type": "date"}}}})
+
         return jsonify({'status': 200, 'filename': 'output.png', 'message': 'Success'}), 200
     except Exception as e:
         print(f"Error processing request: {e}")

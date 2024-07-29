@@ -4,7 +4,11 @@ import glob
 import os
 from moviepy.editor import VideoFileClip, ImageClip, ImageSequenceClip
 import numpy as np
+from pymongo import MongoClient
 
+client = MongoClient('mongodb://localhost:27017/')
+db = client['Steganography']
+collection = db['video-encode']
 
 def video_hide(inputVideo,text,outputVideo) :
     video = VideoFileClip(inputVideo)
@@ -56,6 +60,16 @@ def encode_video() :
         inputPath = video_path
         output_path = os.path.join(os.path.dirname(video_path), 'output_stego.mp4')
         video_hide(inputPath, message, output_path)
+
+        mongoVideoDecode = {
+            "videoFile" : filename,
+            "secretMessage" : message,
+            "outputFile" : "output_stego.mp4",
+        }
+
+        result = collection.insert_one(mongoVideoDecode)
+        collection.update_one({"_id": result.inserted_id}, {"$set": {"created_at": {"$currentDate": {"type": "date"}}}})
+
         return send_file(output_path, mimetype='video/mp4')
 
     except Exception as e:

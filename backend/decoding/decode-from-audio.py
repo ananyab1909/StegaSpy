@@ -4,6 +4,11 @@ from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 import glob
 import os
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['Steganography']
+collection = db['audio-decode']
 
 def ex_msg(audio):
     path = os.path.abspath(audio)
@@ -62,13 +67,34 @@ def decode_audio() :
         
         if is_wav_file(audio_path):
             ex_msg(audio_path)
+
+            mongoAudioDecode = {
+                "audioFile" : filename,
+                "outputFile" : "audio-decoded.txt",
+            }
+
+            result = collection.insert_one(mongoAudioDecode)
+            collection.update_one({"_id": result.inserted_id}, {"$set": {"created_at": {"$currentDate": {"type": "date"}}}})
+
             return jsonify({'status': 200, 'filename': 'audio-decoded.txt', 'essage': 'Success'}), 200
         elif audio_path.endswith('.mp3'):
             wavconvert(audio_path)
             ex_msg('output.wav')
+
+            mongoAudioDecode = {
+                "audioFile" : filename,
+                "outputFile" : "audio-decoded.txt",
+            }
+
+            result = collection.insert_one(mongoAudioDecode)
+            collection.update_one({"_id": result.inserted_id}, {"$set": {"created_at": {"$currentDate": {"type": "date"}}}})
+
             return jsonify({'status': 200, 'filename': 'audio-decoded.txt', 'essage': 'Success'}), 200
+
         else:
             return jsonify({'status': 400, 'essage': 'Only WAV and MP3 files are supported'}), 400
+        
+        
 
     except Exception as e:
         import traceback
