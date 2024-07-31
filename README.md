@@ -1,4 +1,4 @@
-# StegaSpy
+# Steganography
 
 A fast and simple steganography website to encode and decode text, audio, video and text. 
 
