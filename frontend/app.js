@@ -26,8 +26,7 @@ imgdecode.style.display = 'none';
 const audiodecode = document.querySelector('.audio-extract');
 audiodecode.style.display = 'none';
 
-const viddecode = document.querySelector('.video-extract');
-viddecode.style.display = 'none';
+
 
 const textdecode = document.querySelector('.text-extract');
 textdecode.style.display = 'none';
@@ -76,13 +75,6 @@ buttondecode2.addEventListener('click',()=>{
     div2.style.display ='none';
     div3.style.display ='none';
     audiodecode.style.display = 'block';
-})
-
-buttondecode3.addEventListener('click',()=>{
-    div1.style.display ='none';
-    div2.style.display ='none';
-    div3.style.display ='none';
-    viddecode.style.display = 'block';
 })
 
 buttondecode4.addEventListener('click',()=>{
