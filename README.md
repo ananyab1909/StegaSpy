@@ -1,6 +1,6 @@
 # Steganography
 
-A fast and simple steganography website to encode and decode text, audio, video and text. 
+A fast and simple steganography website to encode and decode image, audio, video and text. 
 
 ## Highlights
 1. Simple and Fast.
