@@ -19,7 +19,6 @@ A fast and simple steganography website to encode and decode image, audio, video
 
 ## Requirements
 - MongoDB must be installed on device.
-- A database named url_shortener must be created in the same.
 
 ## About Me
 Hello, my name is Ananya Biswas. I am an Engineering Student at [Kalinga Institute of Industrial Technology](https://kiit.ac.in/). I enjoy making teeny tiny projects in
